@@ -3,6 +3,7 @@ from collections import namedtuple
 
 File = namedtuple('File', ['full_path', 'filename'])
 
+
 class DirectoryScanner(object):
     def __init__(self, basepath):
         self.basepath = basepath
