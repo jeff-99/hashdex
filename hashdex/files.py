@@ -14,7 +14,7 @@ class DirectoryScanner(object):
                 file_list.append(File(os.path.join(root, file), file))
 
             for subdir in subdirs:
-                self._fetch_files(subdir, files)
+                self._fetch_files(subdir, file_list)
 
         return file_list
 
