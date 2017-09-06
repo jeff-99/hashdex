@@ -5,8 +5,8 @@
 
 import pytest
 
-from click.testing import CliRunner
-from hashdex import cli
+# from click.testing import CliRunner
+# from hashdex import cli
 
 
 @pytest.fixture

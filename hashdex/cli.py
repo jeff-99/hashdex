@@ -1,6 +1,7 @@
-import click, os
+import os
+import click
 from .files import DirectoryScanner
-from .indexer import Indexer
+from .indexer import Indexer, Hasher, create_connection
 
 
 @click.command()
@@ -10,7 +11,7 @@ def index(dir, index):
     scanner = DirectoryScanner(dir)
 
     build_db = not os.path.exists(index)
-    indexer = Indexer(index)
+    indexer = Indexer(create_connection(index), Hasher())
     if build_db:
         indexer.build_db()
 
@@ -35,7 +36,7 @@ def index(dir, index):
 def check(dir, index):
 
     scanner = DirectoryScanner(dir)
-    indexer = Indexer(index)
+    indexer = Indexer(create_connection(index), Hasher())
 
     files = scanner.get_files()
     click.echo("{} files to check".format(len(files)))
@@ -54,7 +55,7 @@ def check(dir, index):
 @click.command()
 @click.option('--index', default='index.db', help="index to check against")
 def duplicates(index):
-    indexer = Indexer(index)
+    indexer = Indexer(create_connection(index), Hasher())
     for dupes in indexer.get_duplicates():
         click.echo("*" * 150)
         total_dupes = len(dupes)
@@ -65,6 +66,7 @@ def duplicates(index):
         click.echo(msg)
 
     click.echo("*" * 150)
+
 
 cli = click.Group()
 cli.add_command(index)

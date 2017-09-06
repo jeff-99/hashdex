@@ -15,6 +15,7 @@ def walk_return_values(dir):
     else:
         return [('dir', [], ['x.txt'])]
 
+
 def test_recursive_dir(mocker):
     mocked_walk = mocker.patch('os.walk')
     mocked_walk.side_effect = walk_return_values
