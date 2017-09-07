@@ -10,5 +10,5 @@ cryptography==2.0.3
 PyYAML==3.12
 pytest==3.2.1
 pytest-mock==1.6.2
-pytest-runner==2.12
+pytest-runner==2.12.1
 six==1.10.0
