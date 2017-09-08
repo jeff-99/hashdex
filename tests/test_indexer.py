@@ -54,6 +54,18 @@ def test_logging_of_db_exception_on_file_add(mocker):
 
     assert connection.rollback.called is True
 
+def test_in_index(mocker):
+    connection = mocker.Mock()
+    connection.execute.return_value.fetchone.return_value = [File("x", "y")]
+
+    hasher = mocker.Mock()
+    hasher.get_hashes.return_value = ("hash1", "hash2")
+
+    f = File("x", "y")
+    indexer = Indexer(connection, hasher)
+
+    assert indexer.in_index(f) is True
+
 
 def test_hasher_hashes_file_content(mocker):
     if six.PY3:

@@ -64,7 +64,7 @@ class Indexer(object):
 
     def in_index(self, file):
         sha_hash, md5_hash = self.hasher.get_hashes(file)
-        return self._check_index(sha_hash, md5_hash)
+        return self._check_index(sha_hash, md5_hash) is not None
 
     def fetch_indexed_file(self, file):
         sha_hash, md5_hash = self.hasher.get_hashes(file)
