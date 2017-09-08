@@ -2,7 +2,7 @@
 History
 =======
 
-0.2.0 (*)
+0.2.0 (2017-09-08)
 ------------------
 
 * Refactored Indexer class
