@@ -1,4 +1,5 @@
 import sqlite3
+import six
 from hashlib import sha1, md5
 from hashdex.files import File
 from hashdex.indexer import Indexer, Hasher, create_connection
@@ -55,7 +56,10 @@ def test_logging_of_db_exception_on_file_add(mocker):
 
 
 def test_hasher_hashes_file_content(mocker):
-    mocked_open = mocker.patch("hashdex.indexer.open")
+    if six.PY3:
+        mocked_open = mocker.patch("builtins.open")
+    else:
+        mocked_open = mocker.patch("__builtin__.open")
 
     file_mock = mocker.MagicMock()
     mocked_open.return_value = file_mock
