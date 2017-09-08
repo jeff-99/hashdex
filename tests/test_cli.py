@@ -35,7 +35,8 @@ def test_duplicates(mocker):
     mocked_indexer = mocker.patch('hashdex.cli.Indexer')
     mocked_indexer.return_value = i
 
-    result = runner.invoke(cli, ['duplicates'])
+    with runner.isolated_filesystem():
+        result = runner.invoke(cli, ['duplicates'])
 
     assert 'x' in result.output
     assert 'y' in result.output
