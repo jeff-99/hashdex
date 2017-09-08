@@ -83,14 +83,13 @@ class Indexer(object):
 
     def get_duplicates(self):
         cursor = self.connection.cursor()
-        cursor.execute("""
+
+        dupes = cursor.execute("""
             SELECT GROUP_CONCAT(full_path , '|') FROM files f
             JOIN hashes h ON h.hash_id = f.hash_id
             GROUP BY h.hash_id
             HAVING COUNT(h.hash_id) > 1
-        """)
-
-        dupes = cursor.fetchall()
+        """).fetchall()
         for (dupe,) in dupes:
             real_dupes = dupe.split("|")
             yield real_dupes

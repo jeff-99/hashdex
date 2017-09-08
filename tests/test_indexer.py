@@ -54,9 +54,10 @@ def test_logging_of_db_exception_on_file_add(mocker):
 
     assert connection.rollback.called is True
 
+
 def test_in_index(mocker):
     connection = mocker.Mock()
-    connection.execute.return_value.fetchone.return_value = [File("x", "y")]
+    connection.execute.return_value.fetchone.return_value = ("x",)
 
     hasher = mocker.Mock()
     hasher.get_hashes.return_value = ("hash1", "hash2")
@@ -65,6 +66,72 @@ def test_in_index(mocker):
     indexer = Indexer(connection, hasher)
 
     assert indexer.in_index(f) is True
+
+
+def test_fetch_indexed_file(mocker):
+    connection = mocker.MagicMock()
+    connection.cursor.return_value.execute.return_value.fetchone.return_value = ("x", "y")
+
+    hasher = mocker.Mock()
+    hasher.get_hashes.return_value = ("hash1", "hash2")
+
+    f = File("x", "y")
+    indexer = Indexer(connection, hasher)
+
+    assert indexer.fetch_indexed_file(f).filename == f.filename
+
+
+def test_fetch_non_existing_file(mocker):
+    connection = mocker.MagicMock()
+    connection.cursor.return_value.execute.return_value.fetchone.return_value = None
+
+    hasher = mocker.Mock()
+    hasher.get_hashes.return_value = ("hash1", "hash2")
+
+    f = File("x", "y")
+    indexer = Indexer(connection, hasher)
+
+    assert indexer.fetch_indexed_file(f) is None
+
+
+def test_get_index_count(mocker):
+    connection = mocker.MagicMock()
+    connection.cursor.return_value.execute.return_value.fetchone.return_value = (10,)
+
+    indexer = Indexer(connection, mocker.Mock())
+    assert indexer.get_index_count() == 10
+
+
+def test_get_duplicates(mocker):
+    connection = mocker.MagicMock()
+    connection\
+        .cursor.return_value \
+        .execute.return_value \
+        .fetchall.return_value = [("path1|path2",), (("path3|path4|path5",))]
+
+    indexer = Indexer(connection, mocker.Mock())
+    assert list(indexer.get_duplicates()) == [["path1", "path2"], ["path3", "path4", "path5"]]
+
+
+def test_build_db(mocker):
+    connection = mocker.MagicMock()
+
+    indexer = Indexer(connection, mocker.Mock())
+    indexer.build_db()
+    assert connection.execute.call_count == 4
+
+
+def test_db_schema_after_build(mocker):
+    connection = create_connection(":memory:")
+
+    indexer = Indexer(connection, mocker.Mock())
+    indexer.build_db()
+
+    tables = map(
+        lambda x: x[0],
+        connection.execute("SELECT tbl_name FROM sqlite_master WHERE type='table'").fetchall())
+
+    assert set(tables).issubset(["hashes", "files", "sqlite_sequence"])
 
 
 def test_hasher_hashes_file_content(mocker):
