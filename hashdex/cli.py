@@ -26,8 +26,8 @@ def index(dir, index):
         for file in files:
             indexer.add_file(file)
 
-    click.echo("Successfully Indexed {} files".format(len(real_files)))
-    click.echo("A total of {} files are indexed".format(indexer.get_index_count()))
+    click.echo("Successfully Indexed {0} files".format(len(real_files)))
+    click.echo("A total of {0} files are indexed".format(indexer.get_index_count()))
 
 
 @click.command()
@@ -39,17 +39,17 @@ def check(dir, index):
     indexer = Indexer(create_connection(index), Hasher())
 
     files = scanner.get_files()
-    click.echo("{} files to check".format(len(files)))
+    click.echo("{0} files to check".format(len(files)))
 
     deleted = 0
     for file in files:
         original = indexer.fetch_indexed_file(file)
         if original is not None:
-            click.echo('deleting {} - original file located at {}'.format(file.full_path, original.full_path))
+            click.echo('deleting {0} - original file located at {1}'.format(file.full_path, original.full_path))
             os.unlink(file.full_path)
             deleted += 1
 
-    click.echo("{} files of {} files deleted !".format(deleted, len(files)))
+    click.echo("{0} files of {1} files deleted !".format(deleted, len(files)))
 
 
 @click.command()
@@ -61,7 +61,7 @@ def duplicates(index):
         total_dupes = len(dupes)
         msg = "\n"
         for i in range(total_dupes):
-            msg += "{} \n".format(dupes[i])
+            msg += "{0} \n".format(dupes[i])
 
         click.echo(msg)
 
@@ -72,6 +72,3 @@ cli = click.Group()
 cli.add_command(index)
 cli.add_command(check)
 cli.add_command(duplicates)
-
-if __name__ == '__main__':
-    cli()
