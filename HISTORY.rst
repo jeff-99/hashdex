@@ -5,6 +5,8 @@ History
 0.3.0 (2017-09-12)
 ------------------
 * Added --rm flag to check cli command (without the flag the command will not delete files)
+* Dropped python 2.6 & 3.3 support
+* Updated dependencies
 
 0.2.0 (2017-09-08)
 ------------------
