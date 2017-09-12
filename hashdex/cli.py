@@ -31,9 +31,10 @@ def index(dir, index):
 
 
 @click.command()
+@click.option('--rm', default=False, help="delete duplicate files", is_flag=True)
 @click.option('--dir', default='.', help="directory to check against index")
 @click.option('--index', default='index.db', help="index to check against")
-def check(dir, index):
+def check(rm, dir, index):
 
     scanner = DirectoryScanner(dir)
     indexer = Indexer(create_connection(index), Hasher())
@@ -45,8 +46,12 @@ def check(dir, index):
     for file in files:
         original = indexer.fetch_indexed_file(file)
         if original is not None:
-            click.echo('deleting {0} - original file located at {1}'.format(file.full_path, original.full_path))
-            os.unlink(file.full_path)
+            if rm:
+                click.echo('deleting {0} - original file located at {1}'.format(file.full_path, original.full_path))
+                os.unlink(file.full_path)
+            else:
+                click.echo('duplicate file found {0} - original file located at {1}'.format(
+                    file.full_path, original.full_path))
             deleted += 1
 
     click.echo("{0} files of {1} files deleted !".format(deleted, len(files)))

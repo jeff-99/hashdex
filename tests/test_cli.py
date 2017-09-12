@@ -42,7 +42,7 @@ def test_duplicates(mocker):
     assert 'y' in result.output
 
 
-def test_check(mocker):
+def test_check_without_rm(mocker):
     f = File("./x.txt", 'x.txt')
     i = mocker.MagicMock()
     i.fetch_indexed_file.return_value = f
@@ -60,4 +60,27 @@ def test_check(mocker):
 
         result = runner.invoke(cli, ['check', '--dir', './input'])
 
+        assert os.path.exists('./input/x.txt') is True
+        assert f.full_path in result.output
+
+
+def test_check_with_rm(mocker):
+    f = File("./x.txt", 'x.txt')
+    i = mocker.MagicMock()
+    i.fetch_indexed_file.return_value = f
+
+    mocked_indexer = mocker.patch('hashdex.cli.Indexer')
+    mocked_indexer.return_value = i
+
+    runner = CliRunner()
+
+    with runner.isolated_filesystem():
+        os.mkdir("output")
+        os.mkdir("input")
+        with open('./input/x.txt', 'w') as df:
+            df.write("a" * 10000)
+
+        result = runner.invoke(cli, ['check', '--rm', '--dir', './input'])
+
+        assert os.path.exists('./input/x.txt') is False
         assert f.full_path in result.output
