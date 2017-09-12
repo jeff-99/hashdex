@@ -30,7 +30,6 @@ Features
 
 * TODO
 
-
 Credits
 ---------
 
