@@ -12,18 +12,18 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
-    'Click==6.7'
+    'Click>=6.7'
     # TODO: put package requirements here
 ]
 
 setup_requirements = [
-    'pytest-runner',
+    'pytest-runner>=2.12',
     # TODO(jeff-99): put setup requirements (distutils extensions, etc.) here
 ]
 
 test_requirements = [
-    'pytest',
-    'pytest-mock==1.6.2'
+    'pytest>=3.2',
+    'pytest-mock>=1.6'
     # TODO: put package test requirements here
 ]
 
