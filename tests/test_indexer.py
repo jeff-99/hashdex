@@ -151,3 +151,34 @@ def test_hasher_hashes_file_content(mocker):
     hashes = hasher.get_hashes(f)
 
     assert hashes == (sha1(b"content").hexdigest(), md5(b"content").hexdigest())
+
+
+def test_get_files(mocker):
+    connection = mocker.MagicMock()
+    connection \
+        .cursor.return_value \
+        .execute.return_value \
+        .fetchmany.side_effect = [
+            [("/full/path.log", "path.log"), ("/full/path2.log", "path2.log")],
+            None
+        ]
+
+    indexer = Indexer(connection, mocker.Mock())
+    assert list(indexer.get_files()) == [File("/full/path.log", "path.log"), ("/full/path2.log", "path2.log")]
+
+
+def test_delete_file_from_index(mocker):
+    connection = mocker.MagicMock()
+
+    indexer = Indexer(connection, mocker.Mock())
+    assert indexer.delete(File("/full/path.log", "path.log")) is True
+
+
+def test_delete_file_fails(mocker):
+    connection = mocker.MagicMock()
+    connection \
+        .cursor.return_value \
+        .execute.side_effect = sqlite3.Error()
+
+    indexer = Indexer(connection, mocker.Mock())
+    assert indexer.delete(File("/full/path.log", "path.log")) is False

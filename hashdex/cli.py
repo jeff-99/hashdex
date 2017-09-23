@@ -73,10 +73,21 @@ def duplicates(index):
     click.echo("*" * 150)
 
 
+@click.command()
+@click.option('--index', default='index.db', help="index to check against")
+def cleanup(index):
+    indexer = Indexer(create_connection(index), Hasher())
+
+    for file in indexer.get_files():
+        if not os.path.exists(file.full_path):
+            indexer.delete(file)
+            click.echo("Deleted {0}".format(file.full_path))
+
 cli = click.Group()
 cli.add_command(add)
 cli.add_command(check)
 cli.add_command(duplicates)
+cli.add_command(cleanup)
 
 if __name__ == '__main__': # pragma: no cover
     cli()

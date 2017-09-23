@@ -93,3 +93,31 @@ class Indexer(object):
         for (dupe,) in dupes:
             real_dupes = dupe.split("|")
             yield real_dupes
+
+    def get_files(self):
+        cursor = self.connection.cursor()
+        cursor = cursor.execute("SELECT full_path, filename FROM files")
+
+        while True:
+            results = cursor.fetchmany(1000)
+            if results is None:
+                break
+
+            for result in results:
+                yield File(result[0], result[1])
+
+    def delete(self, file):
+        cursor = self.connection.cursor()
+        try:
+            cursor.execute("DELETE FROM files WHERE full_path = ?", (file.full_path, ))
+            cursor.execute("""
+                DELETE FROM hashes WHERE hash_id IN ( 
+                    SELECT hash_id 
+                    FROM hashes h 
+                    LEFT JOIN files f ON h.hash_id = f.hash_if 
+                    WHERE f.full_path IS NONE
+                )
+            """)
+            return True
+        except sqlite3.Error:
+            return False

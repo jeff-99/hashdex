@@ -82,3 +82,24 @@ def test_check_with_rm(mocker):
 
         assert os.path.exists('./input/x.txt') is False
         assert f.full_path in result.output
+
+
+def test_cleanup_old_files(mocker):
+    runner = CliRunner()
+
+    i = mocker.MagicMock()
+    i.get_files.return_value = [
+        File("./existing.txt", "existing.txt"),
+        File("./non-existing.txt", "non-existing.txt")
+    ]
+
+    mocked_indexer = mocker.patch('hashdex.cli.Indexer')
+    mocked_indexer.return_value = i
+
+    with runner.isolated_filesystem():
+        with open('./existing.txt', 'w') as df:
+            df.write("a" * 10000)
+
+        result = runner.invoke(cli, ['cleanup'])
+
+    assert 'Deleted ./non-existing.txt' in result.output
