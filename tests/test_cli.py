@@ -10,7 +10,7 @@ from hashdex.cli import cli
 from hashdex.files import File
 
 
-def test_indexing():
+def test_adding_to_index():
     runner = CliRunner()
 
     with runner.isolated_filesystem():
@@ -19,7 +19,7 @@ def test_indexing():
         with open('./input/x.txt', 'w') as f:
             f.write("a"*10000)
 
-        result = runner.invoke(cli, ['index', './input', '--index', 'output/index.db'])
+        result = runner.invoke(cli, ['add', './input', '--index', 'output/index.db'])
 
         assert 'Successfully Indexed 1 files' in result.output
 

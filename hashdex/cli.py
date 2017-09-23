@@ -7,7 +7,7 @@ from .indexer import Indexer, Hasher, create_connection
 @click.command()
 @click.argument('directory', default='.', type=click.Path(exists=True))
 @click.option('--index', default='index.db', help="index file")
-def index(directory, index):
+def add(directory, index):
     scanner = DirectoryScanner(directory)
 
     build_db = not os.path.exists(index)
@@ -74,7 +74,7 @@ def duplicates(index):
 
 
 cli = click.Group()
-cli.add_command(index)
+cli.add_command(add)
 cli.add_command(check)
 cli.add_command(duplicates)
 
