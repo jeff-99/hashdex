@@ -19,9 +19,7 @@ def test_indexing():
         with open('./input/x.txt', 'w') as f:
             f.write("a"*10000)
 
-        result = runner.invoke(cli, ['index', '--dir', './input', '--index', 'output/index.db'])
-
-        print(result)
+        result = runner.invoke(cli, ['index', './input', '--index', 'output/index.db'])
 
         assert 'Successfully Indexed 1 files' in result.output
 
@@ -58,7 +56,7 @@ def test_check_without_rm(mocker):
         with open('./input/x.txt', 'w') as df:
             df.write("a" * 10000)
 
-        result = runner.invoke(cli, ['check', '--dir', './input'])
+        result = runner.invoke(cli, ['check', './input'])
 
         assert os.path.exists('./input/x.txt') is True
         assert f.full_path in result.output
@@ -80,7 +78,7 @@ def test_check_with_rm(mocker):
         with open('./input/x.txt', 'w') as df:
             df.write("a" * 10000)
 
-        result = runner.invoke(cli, ['check', '--rm', '--dir', './input'])
+        result = runner.invoke(cli, ['check', '--rm', './input'])
 
         assert os.path.exists('./input/x.txt') is False
         assert f.full_path in result.output

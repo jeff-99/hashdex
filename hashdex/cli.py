@@ -5,10 +5,10 @@ from .indexer import Indexer, Hasher, create_connection
 
 
 @click.command()
-@click.option('--dir', default=".")
+@click.argument('directory', default='.', type=click.Path(exists=True))
 @click.option('--index', default='index.db', help="index file")
-def index(dir, index):
-    scanner = DirectoryScanner(dir)
+def index(directory, index):
+    scanner = DirectoryScanner(directory)
 
     build_db = not os.path.exists(index)
     indexer = Indexer(create_connection(index), Hasher())
@@ -31,12 +31,12 @@ def index(dir, index):
 
 
 @click.command()
-@click.option('--rm', default=False, help="delete duplicate files", is_flag=True)
-@click.option('--dir', default='.', help="directory to check against index")
+@click.argument('directory', default='.', type=click.Path(exists=True))
 @click.option('--index', default='index.db', help="index to check against")
-def check(rm, dir, index):
+@click.option('--rm', default=False, help="delete duplicate files", is_flag=True)
+def check(directory, index, rm):
 
-    scanner = DirectoryScanner(dir)
+    scanner = DirectoryScanner(directory)
     indexer = Indexer(create_connection(index), Hasher())
 
     files = scanner.get_files()
