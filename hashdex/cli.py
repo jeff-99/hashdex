@@ -77,3 +77,6 @@ cli = click.Group()
 cli.add_command(index)
 cli.add_command(check)
 cli.add_command(duplicates)
+
+if __name__ == '__main__': # pragma: no cover
+    cli()
