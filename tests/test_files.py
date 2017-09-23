@@ -18,7 +18,7 @@ def walk_return_values(dir):
 
 def test_recursive_dir(mocker):
     mocked_walk = mocker.patch('os.walk')
-    mocked_walk.side_effect = walk_return_values
+    mocked_walk.return_value = iter([('.', ["dir"], []), ('dir', [], ['x.txt'])])
 
     files = DirectoryScanner('.').get_files()
     assert files[0].filename == 'x.txt'
