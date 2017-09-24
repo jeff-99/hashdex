@@ -2,6 +2,10 @@
 History
 =======
 
+0.4.1 (2017-09-24)
+------------------
+* adjusted for python 2.7 math.floor returning a float
+
 0.4.0 (2017-09-24)
 ------------------
 * renamed the index command to 'add'

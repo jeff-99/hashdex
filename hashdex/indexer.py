@@ -23,7 +23,7 @@ class Hasher(object):
             if filesize < self.BYTE_COUNT:
                 content += f.read(filesize)
             else:
-                part_count = math.floor(self.BYTE_COUNT / 2)
+                part_count = int(math.floor(self.BYTE_COUNT / 2))
                 content += f.read(part_count)
 
                 f.seek(part_count, os.SEEK_END)
