@@ -2,6 +2,14 @@
 History
 =======
 
+0.4.0 (2017-09-24)
+------------------
+* renamed the index command to 'add'
+* refactored --dir option for add/check command to cli argument
+* added cleanup command
+* added docs
+* updated dependencies
+
 0.3.0 (2017-09-12)
 ------------------
 * Added --rm flag to check cli command (without the flag the command will not delete files)
