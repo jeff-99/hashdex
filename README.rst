@@ -18,7 +18,19 @@ Hashdex
      :alt: Updates
 
 
-A file indexer based on content hashes
+A file indexer based on content hashes to quickly find duplicate files on your system.
+I created this tool because I always forget which pictures from my phone I already uploaded to my Dropbox account.
+Now I can just upload all pictures to an uploads directory check these files against the index and only organize
+the remaining files.
+
+As easy as..
+------------
+
+.. code-block:: bash
+
+    pip install hashdex
+    hashdex add /path/to/my-main-pictures-directory
+    hashdex check --rm /path/to/my-uploads-directory
 
 
 * Free software: MIT license
@@ -28,7 +40,9 @@ A file indexer based on content hashes
 Features
 --------
 
-* TODO
+* create an index of your files
+* find duplicate files on your filesystem
+* check if files in a directory are already indexed
 
 Credits
 ---------
