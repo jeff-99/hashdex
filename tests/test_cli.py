@@ -7,7 +7,7 @@ import os
 
 from click.testing import CliRunner
 from hashdex.cli import cli
-from hashdex.files import File
+from hashdex.files import File, DuplicateFileResult
 
 
 def test_adding_to_index():
@@ -27,8 +27,13 @@ def test_adding_to_index():
 def test_duplicates(mocker):
     runner = CliRunner()
 
+    r1 = DuplicateFileResult()
+    r1.add_duplicate("x")
+    r1.add_duplicate("y")
+    r1.add_diff("z")
+
     i = mocker.MagicMock()
-    i.get_duplicates.return_value = ["x", "y"]
+    i.get_duplicates.return_value = [r1]
 
     mocked_indexer = mocker.patch('hashdex.cli.Indexer')
     mocked_indexer.return_value = i
@@ -38,6 +43,26 @@ def test_duplicates(mocker):
 
     assert 'x' in result.output
     assert 'y' in result.output
+    assert 'NOT EQUAL' in result.output
+
+
+def test_duplicates_with_non_equal_duplicates(mocker):
+    runner = CliRunner()
+
+    r1 = DuplicateFileResult()
+    r1.add_diff("x")
+
+    i = mocker.MagicMock()
+    i.get_duplicates.return_value = [r1]
+
+    mocked_indexer = mocker.patch('hashdex.cli.Indexer')
+    mocked_indexer.return_value = i
+
+    with runner.isolated_filesystem():
+        result = runner.invoke(cli, ['duplicates'])
+
+    assert 'x' in result.output
+    assert 'NOT EQUAL' in result.output
 
 
 def test_check_without_rm(mocker):

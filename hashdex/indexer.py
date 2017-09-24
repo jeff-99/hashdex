@@ -1,6 +1,10 @@
+import math
+import os
 import sqlite3
+import filecmp
 from hashlib import sha1, md5
 
+from hashdex.files import DuplicateFileResult
 from .files import File
 
 
@@ -9,9 +13,22 @@ def create_connection(db):
 
 
 class Hasher(object):
+
+    BYTE_COUNT = int(10e5)  # 1MB
+
     def get_hashes(self, file):
+        filesize = os.stat(file.full_path).st_size
         with open(file.full_path, 'rb') as f:
-            content = f.read(10000)
+            content = b""
+            if filesize < self.BYTE_COUNT:
+                content += f.read(filesize)
+            else:
+                part_count = math.floor(self.BYTE_COUNT / 2)
+                content += f.read(part_count)
+
+                f.seek(part_count, os.SEEK_END)
+                content += f.read(part_count)
+
             sha_hash = sha1(content).hexdigest()
             md5_hash = md5(content).hexdigest()
 
@@ -92,7 +109,19 @@ class Indexer(object):
         """).fetchall()
         for (dupe,) in dupes:
             real_dupes = dupe.split("|")
-            yield real_dupes
+
+            result = DuplicateFileResult()
+
+            first = real_dupes[0]
+            result.add_duplicate(first)
+            for next in real_dupes[1:]:
+                same = filecmp.cmp(first, next)
+                if not same:
+                    result.add_diff(next)
+                else:
+                    result.add_duplicate(next)
+
+            yield result
 
     def get_files(self):
         cursor = self.connection.cursor()
@@ -111,10 +140,10 @@ class Indexer(object):
         try:
             cursor.execute("DELETE FROM files WHERE full_path = ?", (file.full_path, ))
             cursor.execute("""
-                DELETE FROM hashes WHERE hash_id IN ( 
-                    SELECT hash_id 
-                    FROM hashes h 
-                    LEFT JOIN files f ON h.hash_id = f.hash_if 
+                DELETE FROM hashes WHERE hash_id IN (
+                    SELECT hash_id
+                    FROM hashes h
+                    LEFT JOIN files f ON h.hash_id = f.hash_id
                     WHERE f.full_path IS NONE
                 )
             """)

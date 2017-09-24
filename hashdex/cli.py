@@ -61,10 +61,15 @@ def check(directory, index, rm):
 @click.option('--index', default='index.db', help="index to check against")
 def duplicates(index):
     indexer = Indexer(create_connection(index), Hasher())
-    for dupes in indexer.get_duplicates():
+    for dupe_result in indexer.get_duplicates():
         click.echo("*" * 150)
-        total_dupes = len(dupes)
+        dupes = dupe_result.get_files()
+
         msg = "\n"
+        if not dupe_result.is_equal():
+            msg = "BELOW FILES ARE NOT EQUAL !! \n"
+
+        total_dupes = len(dupes)
         for i in range(total_dupes):
             msg += "{0} \n".format(dupes[i])
 
@@ -83,11 +88,12 @@ def cleanup(index):
             indexer.delete(file)
             click.echo("Deleted {0}".format(file.full_path))
 
+
 cli = click.Group()
 cli.add_command(add)
 cli.add_command(check)
 cli.add_command(duplicates)
 cli.add_command(cleanup)
 
-if __name__ == '__main__': # pragma: no cover
+if __name__ == '__main__':  # pragma: no cover
     cli()
