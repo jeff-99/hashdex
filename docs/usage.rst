@@ -7,12 +7,16 @@ Hashdex is a command-line utility for quickly checking your files for duplicates
 Create an Hashdex
 -----------------
 
-To initialize an hashdex you need to add some directories to the index..
+To initialize an hashdex you need to add some files/directories to the index..
 
 .. highlight:: sh
 .. code-block:: bash
 
+    # directory
     hashdex add /path/to/directory
+
+    # file
+    hashdex add /path/to/file.txt
 
 
 This will create an index file in the users home folder (**~/.config/hashdex/index.db**)
@@ -30,7 +34,11 @@ Check new files against index
 
 .. code-block:: bash
 
+    # directory
     hashdex check --index /path/to/index.db /path/to/directory/to/check
+
+    # file
+    hashdex check /path/to/file.txt
 
 This will list all files in the given directory which are already indexed with the indexed file path.
 You can add the **--rm** flag to delete all files in the given directory which are found in the index, so you will be

@@ -17,6 +17,9 @@ class DirectoryScanner(object):
         return file_list
 
     def get_files(self):
+        if os.path.isfile(self.basepath):
+            real_path = os.path.realpath(os.path.expanduser(self.basepath))
+            return [File(real_path, os.path.basename(real_path))]
         return self._fetch_files(self.basepath)
 
 
