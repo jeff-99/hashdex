@@ -19,7 +19,7 @@ To initialize an hashdex you need to add some files/directories to the index..
     hashdex add /path/to/file.txt
 
 
-This will create an index file in the current working directory with the name **index.db**
+This will create an index file in the users home folder (**~/.config/hashdex/index.db**)
 If you want to create an index in another location you can specify the **--index** option to the command
 
 .. code-block:: bash

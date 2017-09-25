@@ -3,6 +3,7 @@ History
 =======
 
 * added support for adding and checking files instead of directories
+* moved default index file to users home directory
 
 0.4.1 (2017-09-24)
 ------------------
