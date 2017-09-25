@@ -39,7 +39,7 @@ def test_duplicates(mocker):
     mocked_indexer.return_value = i
 
     with runner.isolated_filesystem():
-        result = runner.invoke(cli, ['duplicates'])
+        result = runner.invoke(cli, ['duplicates', '--index', './index.db'])
 
     assert 'x' in result.output
     assert 'y' in result.output
@@ -59,7 +59,7 @@ def test_duplicates_with_non_equal_duplicates(mocker):
     mocked_indexer.return_value = i
 
     with runner.isolated_filesystem():
-        result = runner.invoke(cli, ['duplicates'])
+        result = runner.invoke(cli, ['duplicates', '--index', './index.db'])
 
     assert 'x' in result.output
     assert 'NOT EQUAL' in result.output
@@ -81,7 +81,7 @@ def test_check_without_rm(mocker):
         with open('./input/x.txt', 'w') as df:
             df.write("a" * 10000)
 
-        result = runner.invoke(cli, ['check', './input'])
+        result = runner.invoke(cli, ['check', './input', '--index', './index.db'])
 
         assert os.path.exists('./input/x.txt') is True
         assert f.full_path in result.output
@@ -103,7 +103,7 @@ def test_check_with_rm(mocker):
         with open('./input/x.txt', 'w') as df:
             df.write("a" * 10000)
 
-        result = runner.invoke(cli, ['check', '--rm', './input'])
+        result = runner.invoke(cli, ['check', '--rm', '--index', './index.db', './input'])
 
         assert os.path.exists('./input/x.txt') is False
         assert f.full_path in result.output
@@ -125,6 +125,6 @@ def test_cleanup_old_files(mocker):
         with open('./existing.txt', 'w') as df:
             df.write("a" * 10000)
 
-        result = runner.invoke(cli, ['cleanup'])
+        result = runner.invoke(cli, ['cleanup', '--index', './index.db'])
 
     assert 'Deleted ./non-existing.txt' in result.output

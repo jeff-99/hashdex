@@ -2,6 +2,8 @@
 History
 =======
 
+* moved default index file to users home directory
+
 0.4.1 (2017-09-24)
 ------------------
 * adjusted for python 2.7 math.floor returning a float

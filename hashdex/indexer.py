@@ -9,7 +9,15 @@ from .files import File
 
 
 def create_connection(db):
-    return sqlite3.connect(db)
+    if db == ':memory:':
+        connection_string = db
+    else:
+        connection_string = os.path.expanduser(db)
+        dirname = os.path.dirname(connection_string)
+        if not os.path.exists(dirname):
+            os.makedirs(dirname)
+
+    return sqlite3.connect(connection_string)
 
 
 class Hasher(object):
