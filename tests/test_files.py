@@ -17,6 +17,11 @@ class TestDirectoryScanner():
         files = DirectoryScanner('.').get_files()
         assert files[0].filename == 'x.txt'
 
+    def test_path_is_file(self):
+        files = DirectoryScanner(__file__).get_files()
+        assert len(files) == 1
+        assert files[0].full_path == __file__
+
 
 class TestDuplicateFileResult():
     def test_add_duplicate(self):

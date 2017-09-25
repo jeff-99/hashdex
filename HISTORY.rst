@@ -2,6 +2,8 @@
 History
 =======
 
+* added support for adding and checking files instead of directories
+
 0.4.1 (2017-09-24)
 ------------------
 * adjusted for python 2.7 math.floor returning a float
