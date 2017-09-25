@@ -1,5 +1,7 @@
 import sqlite3
 import six
+import os
+from tempfile import gettempdir
 from hashlib import sha1, md5
 from hashdex.files import File, DuplicateFileResult
 from hashdex.indexer import Indexer, Hasher, create_connection
@@ -12,6 +14,17 @@ class DummyStatResult(object):
 
 def test_create_connection():
     assert isinstance(create_connection(":memory:"), sqlite3.Connection)
+
+
+def test_create_path_for_connection(mocker):
+    patched_os_exists = mocker.patch("os.path.exists")
+    patched_os_exists.return_value = False
+
+    mocker.patch("os.makedirs")
+    mocker.patch("sqlite3.connect").return_value = "dummy return value"
+
+    connection = os.path.join(gettempdir(), "non/existing/dirs/index.db")
+    assert create_connection(connection) == "dummy return value"
 
 
 class TestIndexer:

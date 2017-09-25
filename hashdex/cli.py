@@ -3,10 +3,12 @@ import click
 from .files import DirectoryScanner
 from .indexer import Indexer, Hasher, create_connection
 
+DEFAULT_INDEX_LOCATION = '~/.config/hashdex/index.db'
+
 
 @click.command()
 @click.argument('directory', default='.', type=click.Path(exists=True))
-@click.option('--index', default='index.db', help="index file")
+@click.option('--index', default=DEFAULT_INDEX_LOCATION, help="index file")
 def add(directory, index):
     scanner = DirectoryScanner(directory)
 
@@ -32,7 +34,7 @@ def add(directory, index):
 
 @click.command()
 @click.argument('directory', default='.', type=click.Path(exists=True))
-@click.option('--index', default='index.db', help="index to check against")
+@click.option('--index', default=DEFAULT_INDEX_LOCATION, help="index to check against")
 @click.option('--rm', default=False, help="delete duplicate files", is_flag=True)
 def check(directory, index, rm):
 
@@ -58,7 +60,7 @@ def check(directory, index, rm):
 
 
 @click.command()
-@click.option('--index', default='index.db', help="index to check against")
+@click.option('--index', default=DEFAULT_INDEX_LOCATION, help="index to check against")
 def duplicates(index):
     indexer = Indexer(create_connection(index), Hasher())
     for dupe_result in indexer.get_duplicates():
@@ -79,7 +81,7 @@ def duplicates(index):
 
 
 @click.command()
-@click.option('--index', default='index.db', help="index to check against")
+@click.option('--index', default=DEFAULT_INDEX_LOCATION, help="index to check against")
 def cleanup(index):
     indexer = Indexer(create_connection(index), Hasher())
 
