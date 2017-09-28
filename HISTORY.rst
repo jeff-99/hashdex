@@ -2,8 +2,11 @@
 History
 =======
 
+0.5.0 (2017-09-28)
+------------------
 * added support for adding and checking files instead of directories
 * moved default index file to users home directory
+* Updated dependencies
 
 0.4.1 (2017-09-24)
 ------------------
