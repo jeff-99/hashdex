@@ -2,6 +2,8 @@
 History
 =======
 
+* Update tox to 2.9.1
+
 0.5.0 (2017-09-28)
 ------------------
 * added support for adding and checking files instead of directories
