@@ -3,6 +3,7 @@ History
 =======
 
 * Update tox to 2.9.1
+* Update pytest to 3.2.3
 
 0.5.0 (2017-09-28)
 ------------------
