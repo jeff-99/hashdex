@@ -2,6 +2,8 @@
 History
 =======
 
+0.6.0 (2017-10-28)
+------------------
 * Added version option to main command
 * Added option to move files while checking for duplicates
 * Updated pytest-runner to 3.0.0
