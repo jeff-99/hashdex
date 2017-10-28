@@ -2,6 +2,7 @@
 History
 =======
 
+* Added option to move files while checking for duplicates
 * Updated pytest-runner to 3.0.0
 * Updated cryptography to 2.1.2
 * Updated sphinx to 1.6.5
