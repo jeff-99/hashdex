@@ -36,8 +36,8 @@ def add(directory, index):
 @click.argument('directory', default='.', type=click.Path(exists=True))
 @click.option('--index', default=DEFAULT_INDEX_LOCATION, help="index to check against")
 @click.option('--rm', default=False, help="delete duplicate files", is_flag=True)
-def check(directory, index, rm):
-
+@click.option('--mv', help="move duplicate files", type=click.Path(exists=True))
+def check(directory, index, rm, mv):
     scanner = DirectoryScanner(directory)
     indexer = Indexer(create_connection(index), Hasher())
 
@@ -51,6 +51,10 @@ def check(directory, index, rm):
             if rm:
                 click.echo('deleting {0} - original file located at {1}'.format(file.full_path, original.full_path))
                 os.unlink(file.full_path)
+            elif not rm and mv:
+                new_path = os.path.join(mv, file.filename)
+                click.echo('moving {0} to {1} - original file located at {2}'.format(file.full_path, new_path,original.full_path))
+                os.rename(file.full_path, new_path)
             else:
                 click.echo('duplicate file found {0} - original file located at {1}'.format(
                     file.full_path, original.full_path))

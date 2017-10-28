@@ -109,6 +109,29 @@ def test_check_with_rm(mocker):
         assert f.full_path in result.output
 
 
+def test_move_duplicate_files_on_check(mocker):
+    f = File("./x.txt", 'x.txt')
+    i = mocker.MagicMock()
+    i.fetch_indexed_file.return_value = f
+
+    mocked_indexer = mocker.patch('hashdex.cli.Indexer')
+    mocked_indexer.return_value = i
+
+    runner = CliRunner()
+
+    with runner.isolated_filesystem():
+        os.mkdir("output")
+        os.mkdir("input")
+        with open('./input/x.txt', 'w') as df:
+            df.write("a" * 10000)
+
+        result = runner.invoke(cli, ['check', '--mv', './output/', '--index', './index.db', './input'])
+
+        assert os.path.exists('./input/x.txt') is False
+        assert os.path.exists('./output/x.txt') is True
+        assert f.full_path in result.output
+
+
 def test_cleanup_old_files(mocker):
     runner = CliRunner()
 

@@ -42,7 +42,16 @@ Check new files against index
 
 This will list all files in the given directory which are already indexed with the indexed file path.
 You can add the **--rm** flag to delete all files in the given directory which are found in the index, so you will be
-left with only new files.
+left with only new files. In addition to the **--rm** flag you can also pass an **--mv** option with an existing path
+to move duplicate files to the given directory.
+
+.. code-block:: bash
+
+    # remove duplicates
+    hashdex check --rm /path/to/directory/to/check
+
+    # move duplicates
+    hashdex check --mv ./duplicates /path/to/directory/to/check
 
 Find duplicate files
 --------------------
