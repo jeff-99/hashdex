@@ -4,10 +4,27 @@
 """Tests for `hashdex` package."""
 
 import os
+import re
 
 from click.testing import CliRunner
 from hashdex.cli import cli
 from hashdex.files import File, DuplicateFileResult
+
+
+def test_main_command_shows_help():
+    runner = CliRunner()
+
+    result = runner.invoke(cli)
+    assert "Usage" in result.output
+
+
+def test_version_command():
+    runner = CliRunner()
+
+    result = runner.invoke(cli, ['-v'])
+    pattern = re.compile("[0-9]+\.[0-9]+\.[0-9]+")
+
+    assert pattern.match(result.output)
 
 
 def test_adding_to_index():

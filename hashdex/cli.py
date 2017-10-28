@@ -1,12 +1,25 @@
 import os
 import click
+import hashdex
 from .files import DirectoryScanner
 from .indexer import Indexer, Hasher, create_connection
 
 DEFAULT_INDEX_LOCATION = '~/.config/hashdex/index.db'
 
 
-@click.command()
+@click.group(invoke_without_command=True)
+@click.option("-v", help="show current version", is_flag=True)
+@click.pass_context
+def cli(ctx,v):
+    if v:
+        click.echo(hashdex.__version__)
+        ctx.exit()
+    elif not ctx.invoked_subcommand:
+        click.echo(ctx.get_help(), color=ctx.color)
+        ctx.exit()
+
+
+@cli.command()
 @click.argument('directory', default='.', type=click.Path(exists=True))
 @click.option('--index', default=DEFAULT_INDEX_LOCATION, help="index file")
 def add(directory, index):
@@ -32,7 +45,7 @@ def add(directory, index):
     click.echo("A total of {0} files are indexed".format(indexer.get_index_count()))
 
 
-@click.command()
+@cli.command()
 @click.argument('directory', default='.', type=click.Path(exists=True))
 @click.option('--index', default=DEFAULT_INDEX_LOCATION, help="index to check against")
 @click.option('--rm', default=False, help="delete duplicate files", is_flag=True)
@@ -63,7 +76,7 @@ def check(directory, index, rm, mv):
     click.echo("{0} files of {1} files deleted !".format(deleted, len(files)))
 
 
-@click.command()
+@cli.command()
 @click.option('--index', default=DEFAULT_INDEX_LOCATION, help="index to check against")
 def duplicates(index):
     indexer = Indexer(create_connection(index), Hasher())
@@ -84,7 +97,7 @@ def duplicates(index):
     click.echo("*" * 150)
 
 
-@click.command()
+@cli.command()
 @click.option('--index', default=DEFAULT_INDEX_LOCATION, help="index to check against")
 def cleanup(index):
     indexer = Indexer(create_connection(index), Hasher())
@@ -93,13 +106,6 @@ def cleanup(index):
         if not os.path.exists(file.full_path):
             indexer.delete(file)
             click.echo("Deleted {0}".format(file.full_path))
-
-
-cli = click.Group()
-cli.add_command(add)
-cli.add_command(check)
-cli.add_command(duplicates)
-cli.add_command(cleanup)
 
 if __name__ == '__main__':  # pragma: no cover
     cli()
