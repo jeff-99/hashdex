@@ -2,6 +2,7 @@
 History
 =======
 
+* Updated pytest-runner to 3.0.0
 * Updated cryptography to 2.1.2
 * Updated sphinx to 1.6.5
 * Updated flake8 to 3.5.0
