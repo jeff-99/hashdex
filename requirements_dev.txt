@@ -11,4 +11,4 @@ PyYAML==3.12
 pytest==3.2.3
 pytest-mock==1.6.3
 pytest-runner==3.0
-six==1.11.0
+six==1.12.0
