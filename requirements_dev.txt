@@ -9,6 +9,6 @@ Sphinx==1.6.5
 cryptography==2.7
 PyYAML==5.1.2
 pytest==3.2.3
-pytest-mock==1.10.4
+pytest-mock==3.3.1
 pytest-runner==5.1
 six==1.12.0
