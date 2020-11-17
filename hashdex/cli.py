@@ -10,7 +10,7 @@ DEFAULT_INDEX_LOCATION = '~/.config/hashdex/index.db'
 @click.group(invoke_without_command=True)
 @click.option("-v", help="show current version", is_flag=True)
 @click.pass_context
-def cli(ctx,v):
+def cli(ctx, v):
     if v:
         click.echo(hashdex.__version__)
         ctx.exit()
@@ -66,7 +66,13 @@ def check(directory, index, rm, mv):
                 os.unlink(file.full_path)
             elif not rm and mv:
                 new_path = os.path.join(mv, file.filename)
-                click.echo('moving {0} to {1} - original file located at {2}'.format(file.full_path, new_path,original.full_path))
+                click.echo(
+                    'moving {0} to {1} - original file located at {2}'.format(
+                        file.full_path,
+                        new_path,
+                        original.full_path
+                        )
+                )
                 os.rename(file.full_path, new_path)
             else:
                 click.echo('duplicate file found {0} - original file located at {1}'.format(
@@ -106,6 +112,7 @@ def cleanup(index):
         if not os.path.exists(file.full_path):
             indexer.delete(file)
             click.echo("Deleted {0}".format(file.full_path))
+
 
 if __name__ == '__main__':  # pragma: no cover
     cli()

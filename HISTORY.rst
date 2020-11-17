@@ -2,6 +2,12 @@
 History
 =======
 
+0.6.1 (2020-11-17)
+------------------
+* Updated development dependencies
+* Added python 3.8 support
+* Dropped python 2.7 support
+
 0.6.0 (2017-10-28)
 ------------------
 * Added version option to main command
