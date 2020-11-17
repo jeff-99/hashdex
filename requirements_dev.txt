@@ -9,6 +9,6 @@ coverage==5.3
 cryptography==3.2.1
 PyYAML==5.1.2
 pytest==6.1.2
-pytest-mock==1.10.4
+pytest-mock==3.3.1
 pytest-runner==5.1
 six==1.12.0
