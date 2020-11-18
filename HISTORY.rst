@@ -6,7 +6,7 @@ History
 ------------------
 * Updated development dependencies
 * Added python 3.8 support
-* Dropped python 2.7 support
+* Dropped python 2.7, 3.4 support
 * Added Dockerfile
 
 0.6.0 (2017-10-28)
