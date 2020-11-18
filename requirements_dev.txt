@@ -11,3 +11,4 @@ pytest-mock>=3.3.1
 pytest-runner>=5.2
 six>=1.15.0
 Click>=6.7
+twine>=3.2
