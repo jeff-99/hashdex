@@ -2,6 +2,21 @@
 Usage
 =====
 
+To use hashdex with docker run the image like
+
+.. highlight:: sh
+.. code-block:: bash
+
+    docker run \
+        --rm \                                 # remove container after usage
+        -v "/path/to/root/directory:/media" \  # mount the root directory of the files to index or check
+        -v "/path/to/index:/db" \              # mount the output directory or file for the index database
+        jeff-99/hashdex:latest \               # docker image name
+        add \                                  # command
+        --index /db/name-of-index.db \         # index location should always start with '/db'
+        /media                                 # location of files should always start with '/media' mounted dir
+
+
 Hashdex is a command-line utility for quickly checking your files for duplicates
 
 Create an Hashdex
