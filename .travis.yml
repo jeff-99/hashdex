@@ -15,7 +15,7 @@ deploy:
       Tm1tQUVRQTVzL0NuOHl6UTVJQ0s1L1I0VEV6b0Zua3J1NUt3LysxTjdNbDBVdTIrV1pFbUNEcVJs
       VnlOYWV2cWtZSmZtclFmNEZZL0VvcnozWEc0aE5Yc2JNSk9xazZtTS9zVlhORGt3NmtFbUxuWmc9
   true:
-    python: 2.7
+    python: 3.8
     repo: jeff-99/hashdex
     tags: true
   user: jeff-99
@@ -24,9 +24,9 @@ deploy:
 install: pip install -U tox-travis
 language: python
 python:
+- 3.8
 - 3.7
 - 3.6
 - 3.5
 - 3.4
-- 2.7
 script: tox
