@@ -22,7 +22,7 @@ def test_version_command():
     runner = CliRunner()
 
     result = runner.invoke(cli, ['-v'])
-    pattern = re.compile("[0-9]+\.[0-9]+\.[0-9]+")
+    pattern = re.compile(r'[0-9]+\.[0-9]+\.[0-9]+')
 
     assert pattern.match(result.output)
 
